@@ -23,7 +23,7 @@ public class CategorySpecification {
 
             if (restaurantId != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(
-                        root.get("restaurantId").get("id"), restaurantId)
+                        root.get("restaurant").get("id"), restaurantId)
                 );
             }
 

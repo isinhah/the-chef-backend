@@ -18,15 +18,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public CategoryResponseDTO getCategoryById(Long id) {
-        Category category = verifyCategoryIdExists(id);
+    public CategoryResponseDTO getCategoryById(UUID restaurantId, Long categoryId) {
+        verifyRestaurantIdExists(restaurantId);
+        Category category = verifyCategoryIdExists(categoryId);
         return new CategoryResponseDTO(category);
     }
 

@@ -15,19 +15,19 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/categories")
+@RequestMapping("/api/v1/restaurants/{restaurantId}/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable Long id) {
-        CategoryResponseDTO dto = categoryService.getCategoryById(id);
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable UUID restaurantId, @PathVariable Long categoryId) {
+        CategoryResponseDTO dto = categoryService.getCategoryById(restaurantId, categoryId);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping
-    public List<CategoryResponseDTO> getAllCategories(@RequestParam(required = false) String name, @RequestParam(required = false) UUID restaurantId, Pageable pageable) {
+    public List<CategoryResponseDTO> getAllCategories(@PathVariable UUID restaurantId, @RequestParam(required = false) String name, Pageable pageable) {
         return categoryService.getAllCategories(name, restaurantId, pageable).getContent();
     }
 
@@ -37,15 +37,15 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newCategory);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponseDTO> alterCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequestDTO dto) {
-        CategoryResponseDTO existingCategory = categoryService.alterCategory(id, dto);
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<CategoryResponseDTO> alterCategory(@PathVariable Long categoryId, @Valid @RequestBody CategoryRequestDTO dto) {
+        CategoryResponseDTO existingCategory = categoryService.alterCategory(categoryId, dto);
         return ResponseEntity.ok(existingCategory);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
+        categoryService.deleteCategory(categoryId);
         return ResponseEntity.noContent().build();
     }
 }
