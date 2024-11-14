@@ -1,14 +1,13 @@
-package com.api.the_chef_backend.model;
+package com.api.the_chef_backend.model.entity;
 
+import com.api.the_chef_backend.model.dtos.request.RestaurantTableRequestDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,12 +22,22 @@ public class RestaurantTable {
 
     @Column(nullable = false)
     private String name;
-    @Column(name = "seat_number")
-    private int seatNumber;
+    @Column(name = "table_number")
+    private int tableNumber;
 
     @OneToMany(mappedBy = "table", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
     @ManyToOne
     private Restaurant restaurant;
+
+    public void alterTable(RestaurantTableRequestDTO dto, Restaurant restaurant) {
+        if (dto.name() != null) {
+            this.name = dto.name();
+        }
+        if (dto.restaurantId() != null) {
+            this.restaurant = restaurant;
+        }
+        this.tableNumber = dto.tableNumber();
+    }
 }
