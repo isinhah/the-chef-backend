@@ -43,9 +43,10 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryResponseDTO createCategory(CategoryRequestDTO dto) {
-        Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
-        verifyCategoryNameExistsInRestaurant(dto);
+    public CategoryResponseDTO createCategory(UUID restaurantId, CategoryRequestDTO dto) {
+        Restaurant restaurant = verifyRestaurantIdExists(restaurantId);
+
+        verifyCategoryNameExistsInRestaurant(restaurantId, dto.name());
 
         Category category = Category.builder()
                 .name(dto.name())
@@ -57,10 +58,11 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryResponseDTO alterCategory(Long id, CategoryRequestDTO dto) {
-        Category category = verifyCategoryIdExists(id);
-        Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
-        verifyCategoryNameExistsInRestaurant(dto);
+    public CategoryResponseDTO alterCategory(UUID restaurantId, Long categoryId, CategoryRequestDTO dto) {
+        Category category = verifyCategoryIdExists(categoryId);
+        Restaurant restaurant = verifyRestaurantIdExists(restaurantId);
+
+        verifyCategoryNameExistsInRestaurant(restaurantId, dto.name());
 
         if (!category.getRestaurant().getId().equals(restaurant.getId())) {
             throw new EntityNotFoundException("Categoria não encontrada para o restaurante especificado.");
@@ -91,8 +93,8 @@ public class CategoryService {
         return restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado com esse id."));
     }
 
-    private void verifyCategoryNameExistsInRestaurant(CategoryRequestDTO dto) {
-        if (categoryRepository.existsByNameAndRestaurantId(dto.name(), dto.restaurantId())) {
+    private void verifyCategoryNameExistsInRestaurant(UUID restaurantId, String name) {
+        if (categoryRepository.existsByNameAndRestaurantId(name, restaurantId)) {
             throw new ConflictException("O nome da categoria já existe.");
         }
     }

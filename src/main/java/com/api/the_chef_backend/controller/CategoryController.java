@@ -37,16 +37,19 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponseDTO> createCategory(@Valid @RequestBody CategoryRequestDTO dto) {
-        CategoryResponseDTO newCategory = categoryService.createCategory(dto);
+    public ResponseEntity<CategoryResponseDTO> createCategory(
+            @PathVariable UUID restaurantId,
+            @Valid @RequestBody CategoryRequestDTO dto) {
+        CategoryResponseDTO newCategory = categoryService.createCategory(restaurantId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(newCategory);
     }
 
     @PutMapping("/{categoryId}")
     public ResponseEntity<CategoryResponseDTO> alterCategory(
+            @PathVariable UUID restaurantId,
             @PathVariable Long categoryId,
             @Valid @RequestBody CategoryRequestDTO dto) {
-        CategoryResponseDTO existingCategory = categoryService.alterCategory(categoryId, dto);
+        CategoryResponseDTO existingCategory = categoryService.alterCategory(restaurantId, categoryId, dto);
         return ResponseEntity.ok(existingCategory);
     }
 
