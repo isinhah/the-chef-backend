@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface RestaurantTableRepository extends JpaRepository<RestaurantTable, Long> {
     Page<RestaurantTable> findAllByRestaurantId(UUID restaurantId, Pageable pageable);
+    boolean existsByRestaurantIdAndTableNumber(UUID restaurantId, int tableNumber);
 }

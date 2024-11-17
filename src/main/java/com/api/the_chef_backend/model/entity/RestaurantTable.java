@@ -35,7 +35,7 @@ public class RestaurantTable {
         if (dto.name() != null) {
             this.name = dto.name();
         }
-        if (dto.restaurantId() != null) {
+        if (restaurant != null) {
             this.restaurant = restaurant;
         }
         this.tableNumber = dto.tableNumber();

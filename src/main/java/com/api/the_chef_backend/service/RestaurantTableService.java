@@ -1,5 +1,6 @@
 package com.api.the_chef_backend.service;
 
+import com.api.the_chef_backend.exceptions.ConflictException;
 import com.api.the_chef_backend.model.dtos.request.RestaurantTableRequestDTO;
 import com.api.the_chef_backend.model.dtos.response.RestaurantTableResponseDTO;
 import com.api.the_chef_backend.model.entity.Restaurant;
@@ -34,8 +35,10 @@ public class RestaurantTableService {
     }
 
     @Transactional
-    public RestaurantTableResponseDTO createTable(RestaurantTableRequestDTO dto) {
-        Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
+    public RestaurantTableResponseDTO createTable(UUID restaurantId, RestaurantTableRequestDTO dto) {
+        Restaurant restaurant = verifyRestaurantIdExists(restaurantId);
+
+        verifyTableNumberExistsInRestaurant(restaurantId, dto.tableNumber());
 
         RestaurantTable table = RestaurantTable.builder()
                 .name(dto.name())
@@ -48,9 +51,17 @@ public class RestaurantTableService {
     }
 
     @Transactional
-    public RestaurantTableResponseDTO alterTable(Long id, RestaurantTableRequestDTO dto) {
-        RestaurantTable table = verifyTableIdExists(id);
-        Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
+    public RestaurantTableResponseDTO alterTable(UUID restaurantId, Long tableId, RestaurantTableRequestDTO dto) {
+        RestaurantTable table = verifyTableIdExists(tableId);
+        Restaurant restaurant = verifyRestaurantIdExists(restaurantId);
+
+        if (!table.getRestaurant().getId().equals(restaurant.getId())) {
+            throw new EntityNotFoundException("Mesa não encontrada para o restaurante especificado.");
+        }
+
+        if (table.getTableNumber() != dto.tableNumber()) {
+            verifyTableNumberExistsInRestaurant(restaurantId, dto.tableNumber());
+        }
 
         table.alterTable(dto, restaurant);
 
@@ -70,5 +81,11 @@ public class RestaurantTableService {
 
     private Restaurant verifyRestaurantIdExists(UUID id) {
         return restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado com esse id."));
+    }
+
+    private void verifyTableNumberExistsInRestaurant(UUID restaurantId, int tableNumber) {
+        if (restaurantTableRepository.existsByRestaurantIdAndTableNumber(restaurantId, tableNumber)) {
+            throw new ConflictException("O número da mesa já existe.");
+        }
     }
 }

@@ -21,25 +21,34 @@ public class RestaurantTableController {
     private final RestaurantTableService restaurantTableService;
 
     @GetMapping("/{tableId}")
-    public ResponseEntity<RestaurantTableResponseDTO> getTableById(@PathVariable UUID restaurantId, @PathVariable Long tableId) {
+    public ResponseEntity<RestaurantTableResponseDTO> getTableById(
+            @PathVariable UUID restaurantId,
+            @PathVariable Long tableId) {
         RestaurantTableResponseDTO dto = restaurantTableService.getTableById(restaurantId, tableId);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping
-    public List<RestaurantTableResponseDTO> getAllTablesByRestaurant(@PathVariable UUID restaurantId, Pageable pageable) {
+    public List<RestaurantTableResponseDTO> getAllTablesByRestaurant(
+            @PathVariable UUID restaurantId,
+            Pageable pageable) {
         return restaurantTableService.getAllTables(restaurantId, pageable).getContent();
     }
 
     @PostMapping
-    public ResponseEntity<RestaurantTableResponseDTO> createTable(@Valid @RequestBody RestaurantTableRequestDTO dto) {
-        RestaurantTableResponseDTO newTable = restaurantTableService.createTable(dto);
+    public ResponseEntity<RestaurantTableResponseDTO> createTable(
+            @PathVariable UUID restaurantId,
+            @Valid @RequestBody RestaurantTableRequestDTO dto) {
+        RestaurantTableResponseDTO newTable = restaurantTableService.createTable(restaurantId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(newTable);
     }
 
     @PutMapping("/{tableId}")
-    public ResponseEntity<RestaurantTableResponseDTO> alterTable(@PathVariable Long tableId, @Valid @RequestBody RestaurantTableRequestDTO dto) {
-        RestaurantTableResponseDTO existingTable = restaurantTableService.alterTable(tableId, dto);
+    public ResponseEntity<RestaurantTableResponseDTO> alterTable(
+            @PathVariable UUID restaurantId,
+            @PathVariable Long tableId,
+            @Valid @RequestBody RestaurantTableRequestDTO dto) {
+        RestaurantTableResponseDTO existingTable = restaurantTableService.alterTable(restaurantId, tableId, dto);
         return ResponseEntity.ok(existingTable);
     }
 
