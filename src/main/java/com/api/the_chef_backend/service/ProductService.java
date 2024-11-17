@@ -1,6 +1,6 @@
 package com.api.the_chef_backend.service;
 
-import com.api.the_chef_backend.exceptions.ConflictException;
+import com.api.the_chef_backend.exception.ConflictException;
 import com.api.the_chef_backend.model.dtos.request.ProductRequestDTO;
 import com.api.the_chef_backend.model.dtos.response.ProductResponseDTO;
 import com.api.the_chef_backend.model.entity.Category;
