@@ -37,16 +37,18 @@ public class ProductExtraController {
 
     @PostMapping
     public ResponseEntity<ProductExtraResponseDTO> createComplement(
+            @PathVariable UUID restaurantId,
             @Valid @RequestBody ProductExtraRequestDTO dto) {
-        ProductExtraResponseDTO newComplement = productExtraService.createComplement(dto);
+        ProductExtraResponseDTO newComplement = productExtraService.createComplement(restaurantId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(newComplement);
     }
 
     @PutMapping("/{complementId}")
     public ResponseEntity<ProductExtraResponseDTO> alterComplement(
+            @PathVariable UUID restaurantId,
             @PathVariable Long complementId,
             @Valid @RequestBody ProductExtraRequestDTO dto) {
-        ProductExtraResponseDTO updatedComplement = productExtraService.alterComplement(complementId, dto);
+        ProductExtraResponseDTO updatedComplement = productExtraService.alterComplement(restaurantId, complementId, dto);
         return ResponseEntity.ok(updatedComplement);
     }
 

@@ -47,8 +47,8 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderResponseDTO createOrder(OrderRequestDTO dto) {
-        Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
+    public OrderResponseDTO createOrder(UUID restaurantId, OrderRequestDTO dto) {
+        Restaurant restaurant = verifyRestaurantIdExists(restaurantId);
         RestaurantTable table = verifyTableIdExists(dto.tableId());
 
         Order order = Order.builder()
@@ -65,9 +65,9 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderResponseDTO alterOrder(Long id, OrderRequestDTO dto) {
-        Order order = verifyOrderIdExists(id);
-        Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
+    public OrderResponseDTO alterOrder(UUID restaurantId, Long orderId, OrderRequestDTO dto) {
+        Order order = verifyOrderIdExists(orderId);
+        Restaurant restaurant = verifyRestaurantIdExists(restaurantId);
         RestaurantTable table = verifyTableIdExists(dto.tableId());
 
         if (!order.getRestaurant().getId().equals(restaurant.getId())) {
@@ -79,8 +79,6 @@ public class OrderService {
         order.setWaiter(dto.waiter());
 
         orderRepository.save(order);
-
-        // order.calculateTotalPrice();
 
         return new OrderResponseDTO(order);
     }

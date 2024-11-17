@@ -46,11 +46,11 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponseDTO createProduct(ProductRequestDTO dto) {
-        Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
+    public ProductResponseDTO createProduct(UUID restaurantId, ProductRequestDTO dto) {
+        Restaurant restaurant = verifyRestaurantIdExists(restaurantId);
         Category category = verifyCategoryIdExists(dto.categoryId());
 
-        verifyProductNameExistsInRestaurant(dto);
+        verifyProductNameExistsInRestaurant(restaurantId, dto.name());
 
         Product product = Product.builder()
                 .name(dto.name())
@@ -68,16 +68,16 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponseDTO alterProduct(Long id, ProductRequestDTO dto) {
-        Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
-        Product product = verifyProductIdExists(id);
+    public ProductResponseDTO alterProduct(UUID restaurantId, Long productId, ProductRequestDTO dto) {
+        Restaurant restaurant = verifyRestaurantIdExists(restaurantId);
+        Product product = verifyProductIdExists(productId);
         Category category = verifyCategoryIdExists(dto.categoryId());
 
         if (!product.getRestaurant().getId().equals(restaurant.getId())) {
             throw new EntityNotFoundException("Produto não encontrado  no restaurante especificado.");
         }
 
-        verifyProductNameExistsInRestaurant(dto);
+        verifyProductNameExistsInRestaurant(restaurantId, dto.name());
 
         product.alterProduct(dto, restaurant, category);
 
@@ -109,8 +109,8 @@ public class ProductService {
         return categoryRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada com esse id."));
     }
 
-    private void verifyProductNameExistsInRestaurant(ProductRequestDTO dto) {
-        if (productRepository.existsByNameAndRestaurantId(dto.name(), dto.restaurantId())) {
+    private void verifyProductNameExistsInRestaurant(UUID restaurantId, String name) {
+        if (productRepository.existsByNameAndRestaurantId(name, restaurantId)) {
             throw new ConflictException("O nome do produto já existe.");
         }
     }

@@ -37,16 +37,19 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> createOrder(@Valid @RequestBody OrderRequestDTO dto) {
-        OrderResponseDTO newOrder = orderService.createOrder(dto);
+    public ResponseEntity<OrderResponseDTO> createOrder(
+            @PathVariable UUID restaurantId,
+            @Valid @RequestBody OrderRequestDTO dto) {
+        OrderResponseDTO newOrder = orderService.createOrder(restaurantId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(newOrder);
     }
 
     @PutMapping("/{orderId}")
     public ResponseEntity<OrderResponseDTO> alterOrder(
+            @PathVariable UUID restaurantId,
             @PathVariable Long orderId,
             @Valid @RequestBody OrderRequestDTO dto) {
-        OrderResponseDTO existingOrder = orderService.alterOrder(orderId, dto);
+        OrderResponseDTO existingOrder = orderService.alterOrder(restaurantId, orderId, dto);
         return ResponseEntity.ok(existingOrder);
     }
 

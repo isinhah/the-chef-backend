@@ -39,8 +39,8 @@ public class ProductExtraService {
     }
 
     @Transactional
-    public ProductExtraResponseDTO createComplement(ProductExtraRequestDTO dto) {
-        Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
+    public ProductExtraResponseDTO createComplement(UUID restaurantId, ProductExtraRequestDTO dto) {
+        Restaurant restaurant = verifyRestaurantIdExists(restaurantId);
 
         ProductExtra productExtra = ProductExtra.builder()
                 .name(dto.name())
@@ -55,10 +55,11 @@ public class ProductExtraService {
     }
 
     @Transactional
-    public ProductExtraResponseDTO alterComplement(Long id, ProductExtraRequestDTO dto) {
-        ProductExtra complement = verifyComplementIdExists(id);
-        Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
-        verifyComplementNameExistsInRestaurant(dto);
+    public ProductExtraResponseDTO alterComplement(UUID restaurantId, Long complementId, ProductExtraRequestDTO dto) {
+        ProductExtra complement = verifyComplementIdExists(complementId);
+        Restaurant restaurant = verifyRestaurantIdExists(restaurantId);
+
+        verifyComplementNameExistsInRestaurant(restaurantId, dto.name());
 
         if (!complement.getRestaurant().getId().equals(restaurant.getId())) {
             throw new EntityNotFoundException("Complemento não encontrado para o restaurante especificado.");
@@ -90,8 +91,8 @@ public class ProductExtraService {
         return restaurantRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado com esse id."));
     }
 
-    private void verifyComplementNameExistsInRestaurant(ProductExtraRequestDTO dto) {
-        if (productExtraRepository.existsByNameAndRestaurantId(dto.name(), dto.restaurantId())) {
+    private void verifyComplementNameExistsInRestaurant(UUID restaurantId, String name) {
+        if (productExtraRepository.existsByNameAndRestaurantId(name, restaurantId)) {
             throw new ConflictException("O nome do complemento já existe.");
         }
     }
