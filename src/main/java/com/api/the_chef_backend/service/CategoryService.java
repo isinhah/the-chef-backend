@@ -28,6 +28,11 @@ public class CategoryService {
     public CategoryResponseDTO getCategoryById(UUID restaurantId, Long categoryId) {
         verifyRestaurantIdExists(restaurantId);
         Category category = verifyCategoryIdExists(categoryId);
+
+        if (!category.getRestaurant().getId().equals(restaurantId)) {
+            throw new EntityNotFoundException("Categoria não encontrada para o restaurante especificado.");
+        }
+
         return new CategoryResponseDTO(category);
     }
 
@@ -57,6 +62,10 @@ public class CategoryService {
         Restaurant restaurant = verifyRestaurantIdExists(dto.restaurantId());
         verifyCategoryNameExistsInRestaurant(dto);
 
+        if (!category.getRestaurant().getId().equals(restaurant.getId())) {
+            throw new EntityNotFoundException("Categoria não encontrada para o restaurante especificado.");
+        }
+
         category.alterCategory(dto, restaurant);
 
         categoryRepository.save(category);
@@ -64,8 +73,13 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteCategory(Long id) {
-        verifyCategoryIdExists(id);
+    public void deleteCategory(UUID restaurantId, Long id) {
+        Category category = verifyCategoryIdExists(id);
+
+        if (!category.getRestaurant().getId().equals(restaurantId)) {
+            throw new EntityNotFoundException("Categoria não encontrada para o restaurante especificado.");
+        }
+
         categoryRepository.deleteById(id);
     }
 

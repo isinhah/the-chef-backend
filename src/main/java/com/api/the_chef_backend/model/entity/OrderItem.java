@@ -1,14 +1,13 @@
-package com.api.the_chef_backend.model;
+package com.api.the_chef_backend.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,11 +17,11 @@ import java.util.Set;
 public class OrderItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "products_quantity")
-    private int productsQuantity;
+    @Column(name = "product_quantity")
+    private int productQuantity;
     @Column(name = "complements_quantity")
     private int complementsQuantity;
 
@@ -31,11 +30,12 @@ public class OrderItem {
     @ManyToOne
     private Product product;
 
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(
-            name = "complementos_do_pedido",
+            name = "complementos_dos_itens",
             joinColumns = @JoinColumn(name = "order_item_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_complement_id")
+            inverseJoinColumns = @JoinColumn(name = "complement_id")
     )
     private Set<ProductExtra> complements = new HashSet<>();
 }

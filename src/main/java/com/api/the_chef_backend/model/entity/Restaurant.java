@@ -17,7 +17,7 @@ import java.util.*;
 public class Restaurant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(unique = true, nullable = false)
@@ -35,9 +35,12 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     @OrderBy("tableNumber")
     private Set<RestaurantTable> tables = new HashSet<>();
-
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Category> categories = new ArrayList<>();
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<Product> products = new ArrayList<>();
 
     public void alterRestaurant(RestaurantRequestDTO dto) {
         if (dto.name() != null) {

@@ -12,7 +12,7 @@ public record RestaurantRequestDTO(
         @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres.")
         String name,
         @NotBlank(message = "CPF ou CNPJ é obrigatório.")
-        @Size(max = 100, message = "CPF/CNPJ deve ter no máximo 14 caracteres.")
+        @Size(max = 14, message = "CPF/CNPJ deve ter no máximo 14 caracteres.")
         String cpfOrCnpj,
         @NotBlank(message = "O telefone é obrigatório.")
         @Size(max = 15, message = "O telefone deve ter no máximo 15 caracteres.")

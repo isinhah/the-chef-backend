@@ -21,13 +21,18 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable UUID restaurantId, @PathVariable Long categoryId) {
+    public ResponseEntity<CategoryResponseDTO> getCategoryById(
+            @PathVariable UUID restaurantId,
+            @PathVariable Long categoryId) {
         CategoryResponseDTO dto = categoryService.getCategoryById(restaurantId, categoryId);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping
-    public List<CategoryResponseDTO> getAllCategories(@PathVariable UUID restaurantId, @RequestParam(required = false) String name, Pageable pageable) {
+    public List<CategoryResponseDTO> getAllCategories(
+            @PathVariable UUID restaurantId,
+            @RequestParam(required = false) String name,
+            Pageable pageable) {
         return categoryService.getAllCategories(name, restaurantId, pageable).getContent();
     }
 
@@ -38,14 +43,18 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryResponseDTO> alterCategory(@PathVariable Long categoryId, @Valid @RequestBody CategoryRequestDTO dto) {
+    public ResponseEntity<CategoryResponseDTO> alterCategory(
+            @PathVariable Long categoryId,
+            @Valid @RequestBody CategoryRequestDTO dto) {
         CategoryResponseDTO existingCategory = categoryService.alterCategory(categoryId, dto);
         return ResponseEntity.ok(existingCategory);
     }
 
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
-        categoryService.deleteCategory(categoryId);
+    public ResponseEntity<Void> deleteCategory(
+            @PathVariable UUID restaurantId,
+            @PathVariable Long categoryId) {
+        categoryService.deleteCategory(restaurantId, categoryId);
         return ResponseEntity.noContent().build();
     }
 }
