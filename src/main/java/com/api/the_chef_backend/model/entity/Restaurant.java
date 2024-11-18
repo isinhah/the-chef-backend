@@ -1,6 +1,6 @@
 package com.api.the_chef_backend.model.entity;
 
-import com.api.the_chef_backend.model.dtos.request.RestaurantRequestDTO;
+import com.api.the_chef_backend.model.dtos.auth.RegisterRestaurantDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +26,10 @@ public class Restaurant {
     private String cpfCnpj;
     @Column(unique = true, nullable = false)
     private String phone;
+    @Column(unique = true, nullable = false)
+    private String email;
+    @Column(nullable = false)
+    private String password;
 
     @Column(name = "table_quantity")
     private int tableQuantity;
@@ -42,10 +46,10 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 
-    public void alterRestaurant(RestaurantRequestDTO dto) {
-        if (dto.name() != null) {
-            this.name = dto.name();
-        }
+    public void alterRestaurant(RegisterRestaurantDTO dto) {
+        this.name = dto.name();
+        this.email = dto.email();
+        this.password = dto.password();
         if (dto.cpfOrCnpj() != null) {
             this.cpfCnpj = dto.cpfOrCnpj();
         }

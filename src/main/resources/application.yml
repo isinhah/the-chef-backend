@@ -1,12 +1,10 @@
 # Database Configuration
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password: ""
-    driver-class-name: org.h2.Driver
-  h2:
-    console.enabled: true
+    url: ${POSTGRES_HOST:jdbc:postgresql://localhost:5432/the_chef_db}
+    username: ${POSTGRES_USERNAME:postgres}
+    password: ${POSTGRES_PASSWORD:admin}
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update

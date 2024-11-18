@@ -2,7 +2,7 @@ package com.api.the_chef_backend.service;
 
 import com.api.the_chef_backend.exception.ConflictException;
 import com.api.the_chef_backend.exception.InvalidCpfOrCnpjException;
-import com.api.the_chef_backend.model.dtos.request.RestaurantRequestDTO;
+import com.api.the_chef_backend.model.dtos.auth.RegisterRestaurantDTO;
 import com.api.the_chef_backend.model.dtos.response.RestaurantResponseDTO;
 import com.api.the_chef_backend.model.entity.Restaurant;
 import com.api.the_chef_backend.model.repository.RestaurantRepository;
@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -23,6 +24,10 @@ import java.util.UUID;
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+
+    public Optional<Restaurant> getRestaurantByEmail(String email) {
+        return restaurantRepository.findByEmail(email);
+    }
 
     public RestaurantResponseDTO getRestaurantById(UUID id) {
         Restaurant restaurant = verifyRestaurantIdExists(id);
@@ -36,32 +41,16 @@ public class RestaurantService {
     }
 
     @Transactional
-    public RestaurantResponseDTO createRestaurant(RestaurantRequestDTO dto) {
-        if (restaurantRepository.existsByCpfCnpj(dto.cpfOrCnpj())) {
-            throw new ConflictException("O restaurante já foi registrado.");
-        }
-        if (CpfCnpjValidatorUtil.isValidCpfOrCnpj(dto.cpfOrCnpj())) {
-            throw new InvalidCpfOrCnpjException("O CPF ou CNPJ fornecido é inválido.");
-        }
-
-        Restaurant restaurant = Restaurant.builder()
-                .name(dto.name())
-                .cpfCnpj(dto.cpfOrCnpj())
-                .phone(dto.phone())
-                .tableQuantity(dto.tableQuantity())
-                .waiterCommission(dto.waiterCommission())
-                .build();
-
-        restaurantRepository.save(restaurant);
-        return new RestaurantResponseDTO(restaurant);
-    }
-
-    @Transactional
-    public RestaurantResponseDTO alterRestaurant(UUID id, RestaurantRequestDTO dto) {
+    public RestaurantResponseDTO alterRestaurant(UUID id, RegisterRestaurantDTO dto) {
         Restaurant restaurant = verifyRestaurantIdExists(id);
 
-        if (CpfCnpjValidatorUtil.isValidCpfOrCnpj(dto.cpfOrCnpj())) {
-            throw new InvalidCpfOrCnpjException("O CPF ou CNPJ fornecido é inválido.");
+        if (!restaurant.getEmail().equals(dto.email()) && restaurantRepository.existsByEmail(dto.email())) {
+            throw new ConflictException("Email já registrado.");
+        }
+
+        if (!restaurant.getCpfCnpj().equals(dto.cpfOrCnpj()) &&
+                !CpfCnpjValidatorUtil.isValidCpfOrCnpj(dto.cpfOrCnpj())) {
+            throw new InvalidCpfOrCnpjException("CPF ou CNPJ inválido.");
         }
 
         restaurant.alterRestaurant(dto);

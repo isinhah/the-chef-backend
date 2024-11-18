@@ -4,9 +4,10 @@ public class CpfCnpjValidatorUtil {
 
     public static boolean isValidCpfOrCnpj(String cpfOrCnpj) {
         if (cpfOrCnpj == null || cpfOrCnpj.isEmpty()) {
-            return true;
+            return false;
         }
 
-        return cpfOrCnpj.length() != 11 && cpfOrCnpj.length() != 14;
+        int length = cpfOrCnpj.length();
+        return length == 11 || length == 14;
     }
 }
