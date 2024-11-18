@@ -1,7 +1,7 @@
 package com.api.the_chef_backend.security;
 
 import com.api.the_chef_backend.service.RestaurantService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,11 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Autowired
-    private RestaurantService restaurantService;
+
+    private final RestaurantService restaurantService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, BasicAuthFilter basicAuthFilter) throws Exception {
@@ -35,8 +36,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/v1/restaurants/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/restaurants/{restaurantId}/orders/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/restaurants/{restaurantId}/orders/{orderId}/items/**").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/restaurants/{restaurantId}/orders/**").permitAll()
                         .requestMatchers(HttpMethod.POST,
@@ -48,7 +47,6 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.PUT, "/api/v1/restaurants/{restaurantId}/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/restaurants/{restaurantId}/**").authenticated()
-
                 )
                 .addFilterBefore(basicAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

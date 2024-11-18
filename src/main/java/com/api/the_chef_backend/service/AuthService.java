@@ -31,6 +31,8 @@ public class AuthService {
                 .email(dto.email())
                 .cpfCnpj(dto.cpfOrCnpj())
                 .phone(dto.phone())
+                .tableQuantity(dto.tableQuantity())
+                .waiterCommission(dto.waiterCommission())
                 .password(passwordEncoder.encode(dto.password()))
                 .build();
 
