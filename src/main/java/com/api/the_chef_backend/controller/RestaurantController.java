@@ -1,5 +1,6 @@
 package com.api.the_chef_backend.controller;
 
+import com.api.the_chef_backend.controller.swagger.RestaurantControllerDoc;
 import com.api.the_chef_backend.model.dtos.auth.RegisterRestaurantDTO;
 import com.api.the_chef_backend.model.dtos.response.RestaurantResponseDTO;
 import com.api.the_chef_backend.service.RestaurantService;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/restaurants")
-public class RestaurantController {
+public class RestaurantController implements RestaurantControllerDoc {
 
     private final RestaurantService restaurantService;
 

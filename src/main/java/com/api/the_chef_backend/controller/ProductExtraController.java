@@ -1,5 +1,6 @@
 package com.api.the_chef_backend.controller;
 
+import com.api.the_chef_backend.controller.swagger.ProductExtraControllerDoc;
 import com.api.the_chef_backend.model.dtos.request.ProductExtraRequestDTO;
 import com.api.the_chef_backend.model.dtos.response.ProductExtraResponseDTO;
 import com.api.the_chef_backend.service.ProductExtraService;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/restaurants/{restaurantId}/complements")
-public class ProductExtraController {
+public class ProductExtraController implements ProductExtraControllerDoc {
 
     private final ProductExtraService productExtraService;
 

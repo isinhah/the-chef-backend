@@ -1,5 +1,6 @@
 package com.api.the_chef_backend.controller;
 
+import com.api.the_chef_backend.controller.swagger.OrderItemControllerDoc;
 import com.api.the_chef_backend.model.dtos.request.OrderItemRequestDTO;
 import com.api.the_chef_backend.model.dtos.response.OrderItemResponseDTO;
 import com.api.the_chef_backend.service.OrderItemService;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/restaurants/{restaurantId}/orders/{orderId}/items")
-public class OrderItemController {
+public class OrderItemController implements OrderItemControllerDoc {
 
     private final OrderItemService orderItemService;
 

@@ -1,5 +1,6 @@
 package com.api.the_chef_backend.controller;
 
+import com.api.the_chef_backend.controller.swagger.AuthenticationControllerDoc;
 import com.api.the_chef_backend.model.dtos.auth.AuthResponseDTO;
 import com.api.the_chef_backend.model.dtos.auth.RegisterRestaurantDTO;
 import com.api.the_chef_backend.service.AuthService;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
-public class AuthenticationController {
+public class AuthenticationController implements AuthenticationControllerDoc {
 
     private final AuthService authService;
 

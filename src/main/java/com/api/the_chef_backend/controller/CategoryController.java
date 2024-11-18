@@ -1,5 +1,6 @@
 package com.api.the_chef_backend.controller;
 
+import com.api.the_chef_backend.controller.swagger.CategoryControllerDoc;
 import com.api.the_chef_backend.model.dtos.request.CategoryRequestDTO;
 import com.api.the_chef_backend.model.dtos.response.CategoryResponseDTO;
 import com.api.the_chef_backend.service.CategoryService;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/restaurants/{restaurantId}/categories")
-public class CategoryController {
+public class CategoryController implements CategoryControllerDoc {
 
     private final CategoryService categoryService;
 
