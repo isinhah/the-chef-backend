@@ -24,9 +24,11 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Set<Product> products = new HashSet<>();
 
     @ManyToOne
+    @ToString.Exclude
     private Restaurant restaurant;
 
     public void alterCategory(CategoryRequestDTO dto, Restaurant restaurant) {

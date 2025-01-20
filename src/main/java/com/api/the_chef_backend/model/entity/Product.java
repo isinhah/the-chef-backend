@@ -38,11 +38,14 @@ public class Product {
     private int stock;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<OrderItem> items = new ArrayList<>();
 
     @ManyToOne
+    @ToString.Exclude
     private Category category;
     @ManyToOne
+    @ToString.Exclude
     private Restaurant restaurant;
 
     public void alterProduct(ProductRequestDTO dto, Restaurant restaurant, Category category) {

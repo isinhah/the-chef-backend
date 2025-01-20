@@ -26,9 +26,11 @@ public class RestaurantTable {
     private int tableNumber;
 
     @OneToMany(mappedBy = "table", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Order> orders = new ArrayList<>();
 
     @ManyToOne
+    @ToString.Exclude
     private Restaurant restaurant;
 
     public void alterTable(RestaurantTableRequestDTO dto, Restaurant restaurant) {
