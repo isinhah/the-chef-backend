@@ -28,6 +28,7 @@ API REST desenvolvida para gerenciar restaurantes, oferecendo controle completo 
 </details>
 
 ## Tecnologias
+
 - Linguagem: Java
 - Framework: Spring Boot
 - Banco de Dados: PostgreSQL
