@@ -46,6 +46,11 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 
+    public Restaurant(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public void alterRestaurant(RegisterRestaurantDTO dto) {
         this.name = dto.name();
         this.email = dto.email();
